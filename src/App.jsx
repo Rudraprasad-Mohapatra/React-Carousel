@@ -1,5 +1,7 @@
 import './App.css'
+import "driver.js/dist/driver.css";
 
+import { driver } from "driver.js";
 import { useEffect, useRef, useState } from "react";
 
 import apj from "./assets/Images/apj.png";
@@ -7,6 +9,7 @@ import billgates from "./assets/Images/billGates.png";
 import einstein from "./assets/Images/einstein.png";
 import nelson from "./assets/Images/nelsonMandela.png";
 import steveJobs from "./assets/Images/steveJobs.png";
+import ImageComponent from './Components/ImageComponent.jsx';
 
 const featuredImages = [apj, billgates, einstein, nelson, steveJobs];
 let count = 0;
@@ -48,22 +51,34 @@ function App() {
     slideRef.current.addEventListener("mouseenter", pauseSlider);
     slideRef.current.addEventListener("mouseleave", startSlider);
 
+    const driverObj = driver({
+      showProgress: false,
+      animate: false,
+      steps: [
+        { element: '.prev', popover: { title: 'Prev Button', description: 'Click to see previous picture' } },
+        { element: '.next', popover: { title: 'Next Button', description: 'Click to see Next picture' } },
+      ]
+    });
+
+    driverObj.drive();
+
     return () => {
       clearInterval(slideInterval);
     }
   }, []);
 
 
+
+
+
   return (
     <div className='max-w-screen-xl m-auto'>
       <div ref={slideRef} className="w-full relative select-none">
-        <div className="aspect-w-10 aspect-h-9">
-          <img src={featuredImages[currentIndex]} alt="1st Image" />
-        </div>
+        <ImageComponent featuredImages={featuredImages} currentIndex={currentIndex} />
 
-        <div className="absolute w-full top-1/2 transform -translate-y-1/2 flex justify-between items-start px-3">
-          <button onClick={handleOnPrevClick}>Previous</button>
-          <button onClick={handleOnNextClick}>Next</button>
+        <div className="top-1/2 transform -translate-y-1/2 flex justify-between items-start px-3">
+          <button className="prev" onClick={handleOnPrevClick}>Previous</button>
+          <button className="next" onClick={handleOnNextClick}>Next</button>
         </div>
       </div>
     </div>
